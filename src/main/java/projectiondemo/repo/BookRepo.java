@@ -16,10 +16,12 @@ import java.util.List;
  */
 @RepositoryRestResource
 public interface BookRepo extends JpaRepository<Book, Long> {
-    
+
+    @EntityGraph(attributePaths = {"author", "publisher"})
     @RestResource(path = "byAuthor", rel = "byAuthor")
     Page<Book> findBooksByAuthorNameIgnoreCaseContaining(@Param("name") String authorName, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"author", "publisher"})
     @RestResource(path = "byPublisher", rel = "byPublisher")
     Page<Book> findBooksByPublisherNameIgnoreCaseContaining(@Param("name") String publisherName, Pageable pageable);
 
