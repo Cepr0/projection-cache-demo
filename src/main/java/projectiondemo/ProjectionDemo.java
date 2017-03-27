@@ -21,12 +21,12 @@ public class ProjectionDemo {
     @Bean
     public CacheManager cacheManager() {
         
-        Cache bookRating = new ConcurrentMapCache("bookRating");
-        Cache authorRating = new ConcurrentMapCache("authorRating");
-        Cache bookAuthor = new ConcurrentMapCache("bookAuthor");
-        
+        Cache bookRatings = new ConcurrentMapCache("bookRatings");
+        Cache authorRatings = new ConcurrentMapCache("authorRatings");
+        ConcurrentMapCache publisherRatings = new ConcurrentMapCache("publisherRatings");
+
         SimpleCacheManager manager = new SimpleCacheManager();
-        manager.setCaches(asList(bookRating, authorRating, bookAuthor));
+        manager.setCaches(asList(bookRatings, authorRatings, publisherRatings));
         
         return manager;
     }

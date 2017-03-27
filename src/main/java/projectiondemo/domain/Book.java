@@ -50,8 +50,8 @@ public class Book extends LongId {
         @Value("#{target.publisher.name}")
         String getPublisher();
 
-        @Value("#{@readingRepo.getBookRating(target)}")
-        Float getRating();
+        @Value("#{@readingRepo.getBookRatings(target)}")
+        Reading.Ratings getRatings();
     }
     
     @Projection(name = "bookAuthor", types = Book.class)

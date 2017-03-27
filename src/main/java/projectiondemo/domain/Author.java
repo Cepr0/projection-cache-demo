@@ -1,5 +1,6 @@
 package projectiondemo.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import projectiondemo.domain.base.LongId;
 import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
@@ -33,8 +34,9 @@ public class Author extends LongId {
     public interface Rating {
         
         String getName();
-        
-        @Value("#{@readingRepo.getAuthorRating(target)}")
-        Float getRating();
+
+        @JsonProperty("ratings")
+        @Value("#{@readingRepo.getAuthorRatings(target)}")
+        Reading.Ratings getRatings();
     }
 }
