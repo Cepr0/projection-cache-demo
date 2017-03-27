@@ -17,14 +17,17 @@ import java.util.List;
 @RepositoryRestResource
 public interface BookRepo extends JpaRepository<Book, Long> {
     
-    @RestResource(path = "byAuthorName", rel = "byAuthorName")
-    List<Book> findBooksByAuthorNameIgnoreCaseContaining(@Param("name") String authorName);
-    
+    @RestResource(path = "byAuthor", rel = "byAuthor")
+    Page<Book> findBooksByAuthorNameIgnoreCaseContaining(@Param("name") String authorName, Pageable pageable);
+
+    @RestResource(path = "byPublisher", rel = "byPublisher")
+    Page<Book> findBooksByPublisherNameIgnoreCaseContaining(@Param("name") String publisherName, Pageable pageable);
+
     @Override
-    @EntityGraph(attributePaths = "author")
+    @EntityGraph(attributePaths = {"author", "publisher"})
     List<Book> findAll();
     
     @Override
-    @EntityGraph(attributePaths = "author")
+    @EntityGraph(attributePaths = {"author", "publisher"})
     Page<Book> findAll(Pageable pageable);
 }

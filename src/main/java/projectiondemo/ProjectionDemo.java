@@ -1,13 +1,5 @@
 package projectiondemo;
 
-import projectiondemo.domain.Author;
-import projectiondemo.domain.Book;
-import projectiondemo.domain.Reader;
-import projectiondemo.domain.Reading;
-import projectiondemo.repo.AuthorRepo;
-import projectiondemo.repo.BookRepo;
-import projectiondemo.repo.ReaderRepo;
-import projectiondemo.repo.ReadingRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +9,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
+import projectiondemo.domain.*;
+import projectiondemo.repo.*;
 
 import static java.util.Arrays.asList;
 
@@ -42,19 +36,23 @@ public class ProjectionDemo {
 	}
 	
 	@Bean
-	public CommandLineRunner demo(AuthorRepo authorRepo, BookRepo bookRepo, ReaderRepo readerRepo, ReadingRepo readingRepo) {
+	public CommandLineRunner demo(AuthorRepo authorRepo, PublisherRepo publisherRepo, BookRepo bookRepo, ReaderRepo readerRepo, ReadingRepo readingRepo) {
         return args -> {
             Author author1 = new Author("Author1");
             Author author2 = new Author("Author2");
             Author author3 = new Author("Author3");
             authorRepo.save(asList(author1, author2, author3));
-    
-            Book book1 = new Book("Book1", "1234", author1);
-            Book book2 = new Book("Book2", "2345", author1);
-            Book book3 = new Book("Book3", "3456", author2);
-            Book book4 = new Book("Book4", "4567", author2);
-            Book book5 = new Book("Book5", "5678", author3);
-            Book book6 = new Book("Book6", "6789", author3);
+
+            Publisher p1 = new Publisher("Publisher1");
+            Publisher p2 = new Publisher("Publisher2");
+            publisherRepo.save(asList(p1, p2));
+
+            Book book1 = new Book("Book1", "1234", author1, p1);
+            Book book2 = new Book("Book2", "2345", author1, p1);
+            Book book3 = new Book("Book3", "3456", author2, p1);
+            Book book4 = new Book("Book4", "4567", author2, p2);
+            Book book5 = new Book("Book5", "5678", author3, p2);
+            Book book6 = new Book("Book6", "6789", author3, p2);
             bookRepo.save(asList(book1, book2, book3, book4, book5, book6));
     
             Reader reader1 = new Reader("Reader1", "reader1@mail.com");

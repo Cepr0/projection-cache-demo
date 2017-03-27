@@ -1,18 +1,18 @@
 package projectiondemo.domain;
 
-import projectiondemo.domain.base.LongId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
+import projectiondemo.domain.base.LongId;
 
-import javax.persistence.*;
-
-import static org.hibernate.annotations.FetchMode.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author Cepro, 2017-03-24
@@ -32,10 +32,12 @@ public class Book extends LongId {
     @Column(unique = true)
     private final String isbn;
 
-    @Fetch(JOIN)
     @ManyToOne(optional = false)
     private final Author author;
-    
+
+    @ManyToOne(optional = false)
+    private final Publisher publisher;
+
     @Projection(name = "bookRating", types = Book.class)
     public interface Rating {
         
@@ -44,18 +46,31 @@ public class Book extends LongId {
         
         @Value("#{target.author.name}")
         String getAuthor();
-        
+
+        @Value("#{target.publisher.name}")
+        String getPublisher();
+
         @Value("#{@readingRepo.getBookRating(target)}")
         Float getRating();
     }
     
-    @Projection(name = "withAuthor", types = Book.class)
-    public interface WithAuthor {
+    @Projection(name = "bookAuthor", types = Book.class)
+    public interface BookAuthor {
         
         String getTitle();
         String getIsbn();
     
         @Value("#{target.author.name}")
         String getAuthor();
+    }
+
+    @Projection(name = "bookPublisher", types = Book.class)
+    public interface BookPublisher {
+
+        String getTitle();
+        String getIsbn();
+
+        @Value("#{target.publisher.name}")
+        String getPublisher();
     }
 }
