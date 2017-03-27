@@ -38,7 +38,7 @@ public class Reading extends LongId {
     @Min(1) @Max(5)
     private Integer rating;
 
-    @JsonSerialize(as = Ratings.class)
+    @JsonSerialize(as = Reading.Ratings.class)
     public interface Ratings {
 
         @JsonProperty("rating")

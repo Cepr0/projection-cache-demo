@@ -13,7 +13,7 @@ import projectiondemo.domain.Reading;
 /**
  * @author Cepro, 2017-03-24
  */
-@SuppressWarnings({"SpringCacheAnnotationsOnInterfaceInspection", "SpringDataRepositoryMethodReturnTypeInspection"})
+@SuppressWarnings("SpringCacheAnnotationsOnInterfaceInspection")
 @RepositoryRestResource
 public interface ReadingRepo extends JpaRepository<Reading, Long> {
     

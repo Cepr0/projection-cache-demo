@@ -39,7 +39,7 @@ public class Book extends LongId {
     private final Publisher publisher;
 
     @Projection(name = "bookRating", types = Book.class)
-    public interface Rating {
+    public interface Ratings {
         
         String getTitle();
         String getIsbn();

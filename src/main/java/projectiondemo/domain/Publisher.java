@@ -34,7 +34,7 @@ public class Publisher extends LongId {
     private final List<Book> books = new ArrayList<>();
 
     @Projection(name = "publisherRating", types = Publisher.class)
-    public interface Rating {
+    public interface Ratings {
 
         String getName();
 
@@ -42,5 +42,4 @@ public class Publisher extends LongId {
         @Value("#{@readingRepo.getPublisherRatings(target)}")
         Reading.Ratings getRatings();
     }
-
 }

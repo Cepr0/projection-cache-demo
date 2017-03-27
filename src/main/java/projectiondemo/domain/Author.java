@@ -1,11 +1,15 @@
 package projectiondemo.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import projectiondemo.domain.base.LongId;
-import lombok.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
+import projectiondemo.domain.base.LongId;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -29,9 +33,19 @@ public class Author extends LongId {
     
     @OneToMany(mappedBy = "author")
     private final List<Book> books = new ArrayList<>();
-
+    
+    public Author(Long id, String name, Double rating) {
+        setId(id);
+        this.name = name;
+    }
+    
+    public Author(Long id, String name, Long readings) {
+        setId(id);
+        this.name = name;
+    }
+    
     @Projection(name = "authorRating", types = Author.class)
-    public interface Rating {
+    public interface Ratings {
         
         String getName();
 
