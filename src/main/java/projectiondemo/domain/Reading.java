@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 import projectiondemo.domain.base.LongId;
 
@@ -25,10 +26,12 @@ import javax.validation.constraints.Min;
 @Entity
 @Table(name = "readings")
 public class Reading extends LongId {
-    
+
+    @NaturalId
     @ManyToOne(optional = false)
     private final Reader reader;
-    
+
+    @NaturalId
     @ManyToOne(optional = false)
     private final Book book;
     

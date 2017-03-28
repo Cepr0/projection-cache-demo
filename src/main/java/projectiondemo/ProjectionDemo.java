@@ -59,19 +59,19 @@ public class ProjectionDemo {
             Reader reader2 = new Reader("Reader2", "reader2@mail.com");
             readerRepo.save(asList(reader1, reader2));
     
-            Reading r1 = new Reading(reader1, book1, "review1_1", 1);
+            Reading r1 = new Reading(reader1, book1, "review1_1", 4);
             Reading r2 = new Reading(reader1, book2, "review1_2", 2);
             Reading r3 = new Reading(reader1, book3, "review1_3", 3);
             Reading r4 = new Reading(reader1, book4, "review1_4", 4);
-            Reading r5 = new Reading(reader1, book5, "review1_5", 5);
+            Reading r5 = new Reading(reader1, book5, "review1_5", 3);
             Reading r6 = new Reading(reader1, book6, "review1_6", 4);
             Reading r7 = new Reading(reader2, book1, "review2_1", 2);
             Reading r8 = new Reading(reader2, book2, "review2_2", 3);
             Reading r9 = new Reading(reader2, book3, "review2_3", 4);
             Reading r10 = new Reading(reader2, book4, "review2_4", 5);
             Reading r11 = new Reading(reader2, book5, "review2_5", 4);
-            Reading r12 = new Reading(reader2, book6, "review2_6", 3);
-            readingRepo.save(asList(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12));
+//            Reading r12 = new Reading(reader2, book6, "review2_6", 3);
+            readingRepo.save(asList(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11/*, r12*/));
         };
     }
 }
