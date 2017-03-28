@@ -37,7 +37,23 @@ public class Book extends LongId {
 
     @ManyToOne(optional = false)
     private final Publisher publisher;
-
+    
+    public Book(Long id, String title, String isbn, Author author, Publisher publisher, Double rating, Long aId, String aName, Long pId, String pName) {
+        setId(id);
+        this.title = title;
+        this.isbn = isbn;
+        this.author = author;
+        this.publisher = publisher;
+    }
+    
+    public Book(Long id, String title, String isbn, Author author, Publisher publisher, Long readings, Long aId, String aName, Long pId, String pName) {
+        setId(id);
+        this.title = title;
+        this.isbn = isbn;
+        this.author = author;
+        this.publisher = publisher;
+    }
+    
     @Projection(name = "bookRating", types = Book.class)
     public interface Ratings {
         
