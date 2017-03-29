@@ -1,5 +1,7 @@
 package projectiondemo.repo;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -17,13 +19,13 @@ import java.util.List;
  */
 @RepositoryRestResource
 public interface BookRepo extends JpaRepository<Book, Long> {
-    
+
     @RestResource(path = "topRating", rel = "topRating")
-    @Query("select new Book(b.id, b.title, b.isbn, b.author, b.publisher, avg(r.rating), b.author.id, b.author.name, b.publisher.id, b.publisher.name) from Reading r join r.book b group by b order by avg(r.rating) desc, b.title asc")
+    @Query("select new Book(b.id, b.title, b.isbn, avg(r.rating), a.id, a.name, p.id, p.name) from Reading r join r.book b join r.book.author a join r.book.publisher p group by b order by avg(r.rating) desc, b.title asc")
     Page<Book> topRating(Pageable pageable);
     
     @RestResource(path = "topReadings", rel = "topReadings")
-    @Query("select new Book(b.id, b.title, b.isbn, b.author, b.publisher, count(r), b.author.id, b.author.name, b.publisher.id, b.publisher.name) from Reading r join r.book b group by b order by count(r) desc, b.title asc")
+    @Query("select new Book(b.id, b.title, b.isbn, count(r), a.id, a.name, p.id, p.name) from Reading r join r.book b join r.book.author a join r.book.publisher p group by b order by count(r) desc, b.title asc")
     Page<Book> topReadings(Pageable pageable);
 
     @EntityGraph(attributePaths = {"author", "publisher"})
