@@ -21,11 +21,11 @@ import java.util.List;
 public interface BookRepo extends JpaRepository<Book, Long> {
 
     @RestResource(path = "topRating", rel = "topRating")
-    @Query("select new Book(b.id, b.title, b.isbn, avg(r.rating), a.id, a.name, p.id, p.name) from Reading r join r.book b join r.book.author a join r.book.publisher p group by b order by avg(r.rating) desc, b.title asc")
+    @Query("select new Book(r.book.id, r.book.title, r.book.isbn, avg(r.rating), r.book.author.id, r.book.author.name, r.book.publisher.id, r.book.publisher.name) from Reading r group by r.book order by avg(r.rating) desc, r.book.title asc")
     Page<Book> topRating(Pageable pageable);
     
     @RestResource(path = "topReadings", rel = "topReadings")
-    @Query("select new Book(b.id, b.title, b.isbn, count(r), a.id, a.name, p.id, p.name) from Reading r join r.book b join r.book.author a join r.book.publisher p group by b order by count(r) desc, b.title asc")
+    @Query("select new Book(r.book.id, r.book.title, r.book.isbn, count(r), r.book.author.id, r.book.author.name, r.book.publisher.id, r.book.publisher.name) from Reading r group by r.book order by count(r) desc, r.book.title asc")
     Page<Book> topReadings(Pageable pageable);
 
     @EntityGraph(attributePaths = {"author", "publisher"})
