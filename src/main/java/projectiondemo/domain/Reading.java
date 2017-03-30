@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.rest.core.annotation.Description;
 import projectiondemo.domain.base.LongId;
 
 import javax.persistence.Entity;
@@ -41,6 +42,7 @@ public class Reading extends LongId {
     @Min(1) @Max(5)
     private Integer rating;
 
+    @Description("Book ratings")
     @JsonSerialize(as = Reading.Ratings.class)
     public interface Ratings {
 
