@@ -19,6 +19,8 @@ import java.util.List;
 @RepositoryRestResource
 public interface BookRepo extends JpaRepository<Book, Long> {
 
+    // https://github.com/spring-projects/spring-data-jpa/blob/master/src/test/java/org/springframework/data/jpa/repository/sample/UserRepository.java
+    
     @RestResource(path = "topRating", rel = "topRating")
     @Transactional(readOnly = true)
     @Query(value = "select new Book(r.book.id, r.book.title, r.book.isbn, avg(r.rating), r.book.author.id, r.book.author.name, r.book.publisher.id, r.book.publisher.name) from Reading r group by r.book order by avg(r.rating) desc, r.book.title asc",
@@ -26,6 +28,7 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     Page<Book> topRating(Pageable pageable);
     
     @RestResource(path = "topReadings", rel = "topReadings")
+    @Transactional(readOnly = true)
     @Query(value = "select new Book(r.book.id, r.book.title, r.book.isbn, count(r), r.book.author.id, r.book.author.name, r.book.publisher.id, r.book.publisher.name) from Reading r group by r.book order by count(r) desc, r.book.title asc",
             countQuery = "select count(b) from Book b")
     Page<Book> topReadings(Pageable pageable);

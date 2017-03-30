@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.transaction.annotation.Transactional;
 import projectiondemo.domain.Publisher;
 
 /**
@@ -15,10 +16,14 @@ import projectiondemo.domain.Publisher;
 public interface PublisherRepo extends JpaRepository<Publisher, Long> {
 
     @RestResource(path = "topRating", rel = "topRating")
-    @Query("select new Publisher(p.id, p.name, avg(r.rating)) from Reading r join r.book.publisher p group by p order by avg(r.rating) desc, p.name asc")
+    @Transactional(readOnly = true)
+    @Query(value = "select new Publisher(p.id, p.name, avg(r.rating)) from Reading r join r.book.publisher p group by p order by avg(r.rating) desc, p.name asc",
+            countQuery = "select count(p) from Publisher p")
     Page<Publisher> topRating(Pageable pageable);
     
     @RestResource(path = "topReadings", rel = "topReadings")
-    @Query("select new Publisher(p.id, p.name, count(r)) from Reading r join r.book.publisher p group by p order by count(r) desc, p.name asc")
+    @Transactional(readOnly = true)
+    @Query(value = "select new Publisher(p.id, p.name, count(r)) from Reading r join r.book.publisher p group by p order by count(r) desc, p.name asc",
+            countQuery = "select count(p) from Publisher p")
     Page<Publisher> topReadings(Pageable pageable);
 }
