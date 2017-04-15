@@ -2,7 +2,7 @@
 
 _Using [Projections](http://docs.spring.io/spring-data/rest/docs/current/reference/html/#projections-excerpts.projections) 
 in [Spring Data REST](http://projects.spring.io/spring-data-rest/) as [DTO](https://spring.io/blog/2016/05/03/what-s-new-in-spring-data-hopper#projections-on-repository-query-methods) with cache 
-to reduce the impact of 1+N query problem._
+to reduce the impact of 1+N queries problem._
  
 Our model:
 
@@ -246,7 +246,7 @@ select avg(r.rating) as rating, count(r) as readings from Reading r where r.book
 
 On the large database this can significantly decrease its performance.
 
-To reduce the impact of 1+N query problem we can try to use a **cache**. First we prepare the cache for book ratings:
+To reduce the impact of 1+N queries problem we can try to use a **cache**. First we prepare the cache for book ratings:
   
 ```java
 @SpringBootApplication
