@@ -12,6 +12,7 @@ import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import projectiondemo.domain.*;
 import projectiondemo.repo.*;
+import projectiondemo.rest.ReadingEventHandler;
 
 import java.sql.SQLException;
 
@@ -29,6 +30,12 @@ public class ProjectionDemo {
         return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
     }
     
+    /**
+     * Create three caches to store a result of calculating the ratings of {@link Book}, {@link Author} and {@link Publisher}
+     * <p>in their projections {@link Book.Ratings}, {@link Author.Ratings} and {@link Publisher.Ratings}.
+     * <p>Caches filled in {@link ReadingRepo} 'getXXXRatings' methods
+     * and evicted in {@link ReadingEventHandler#evictCaches}
+     */
     @Bean
     public CacheManager cacheManager() {
         

@@ -41,7 +41,11 @@ public class Reading extends LongId {
     
     @Min(1) @Max(5)
     private Integer rating;
-
+    
+    /**
+     * Simple DTO to store rating and reading count values of {@link Book}, {@link Author} or {@link Publisher}
+     * <p>in {@link Book.Ratings}, {@link Author.Ratings} and {@link Publisher.Ratings} projections
+     */
     @Description("Book ratings")
     @JsonSerialize(as = Reading.Ratings.class)
     public interface Ratings {

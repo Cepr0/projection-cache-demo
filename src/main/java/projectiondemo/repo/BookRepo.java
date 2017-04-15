@@ -22,8 +22,8 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     // https://github.com/spring-projects/spring-data-jpa/blob/master/src/test/java/org/springframework/data/jpa/repository/sample/UserRepository.java
     
     /**
-     * Trying to get book list sorted by their rating
-     * <p>But than we call it as 'GET http://localhost:8080/api/books/search/topRating'
+     * An attempt to get the book list sorted by book rating and expose it with Spring Data REST.
+     * <p>But if we call it 'GET http://localhost:8080/api/books/search/topRating'
      * it raises an error: 'PersistentEntity must not be null!'
      */
     @RestResource(path = "topRating", rel = "topRating")
@@ -33,8 +33,8 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     Page<Book.BookRatings> topRating(Pageable pageable);
     
     /**
-     * Get book list sorted by their number of reading
-     * <p>But than we call it as 'GET http://localhost:8080/api/books/search/topReadings'
+     * An attempt to get the book list sorted by book number of reading and expose it with Spring Data REST.
+     * <p>But if we call it 'GET http://localhost:8080/api/books/search/topReadings'
      * it raises an error: 'PersistentEntity must not be null!'
      */
     @RestResource(path = "topReadings", rel = "topReadings")

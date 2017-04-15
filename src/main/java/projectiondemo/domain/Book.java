@@ -8,6 +8,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 import projectiondemo.domain.base.LongId;
+import projectiondemo.repo.BookRepo;
+import projectiondemo.repo.ReadingRepo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +40,12 @@ public class Book extends LongId {
     @ManyToOne(optional = false)
     private final Publisher publisher;
     
+    /**
+     * Projection that defines Book ratings DTO - an attempt to use projections in repositories methods
+     * to expose DTO with Spring Data REST.
+     *
+     * See methods {@link BookRepo#topRating} and {@link BookRepo#topReadings}
+     */
     public interface BookRatings {
         Book getBook();
         Author getAuthor();
@@ -46,6 +54,9 @@ public class Book extends LongId {
         Long getReadings();
     }
     
+    /**
+     * Projection that defines {@link Book} DTO with it ratings
+     */
     @Projection(name = "bookRating", types = Book.class)
     public interface Ratings {
         
@@ -57,7 +68,10 @@ public class Book extends LongId {
 
         @Value("#{target.publisher.name}")
         String getPublisher();
-
+    
+        /**
+         * {@link ReadingRepo#getBookRatings} is used to calculate {@link Book} ratings and cache result
+         */
         @Value("#{@readingRepo.getBookRatings(target)}")
         Reading.Ratings getRatings();
     }
