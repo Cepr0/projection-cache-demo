@@ -81,4 +81,11 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     @RestResource(path = "withAuthor", rel = "withAuthor")
     @Query("select b.title as title, b.isbn as isbn, a as author from Book b join b.author a")
     Page<Book.BookAuthor> getBooksWithAuthor(Pageable pageable);
+    
+    /**
+     * Another attempt to expose projection
+     */
+    @EntityGraph(attributePaths = {"author", "publisher"})
+    @RestResource(path = "byAuthorName", rel = "byAuthorName")
+    List<Book.BookAuthor> findByAuthor_Name(@Param("name") String authorName);
 }
