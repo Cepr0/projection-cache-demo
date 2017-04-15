@@ -1,7 +1,7 @@
-# Projection demo
+# Projection with cache Demo
 
 _Using [Projections](http://docs.spring.io/spring-data/rest/docs/current/reference/html/#projections-excerpts.projections) 
-in [Spring Data REST](http://projects.spring.io/spring-data-rest/) as [DTO](https://spring.io/blog/2016/05/03/what-s-new-in-spring-data-hopper#projections-on-repository-query-methods)._
+in [Spring Data REST](http://projects.spring.io/spring-data-rest/) as [DTO](https://spring.io/blog/2016/05/03/what-s-new-in-spring-data-hopper#projections-on-repository-query-methods) with cache._
  
 Our model:
 
@@ -200,8 +200,9 @@ Now we can get a book list with ratings:
           "title" : "Author"
         }
       }
-    },
-    ...
+    }
+    //...
+    ]
   },  
   "_links" : {
     "first" : {
