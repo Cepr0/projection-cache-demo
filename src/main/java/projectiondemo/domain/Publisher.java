@@ -33,16 +33,6 @@ public class Publisher extends LongId {
     @OneToMany(mappedBy = "publisher")
     private final List<Book> books = new ArrayList<>();
     
-    public Publisher(Long id, String name, Double rating) {
-        setId(id);
-        this.name = name;
-    }
-    
-    public Publisher(Long id, String name, Long readings) {
-        setId(id);
-        this.name = name;
-    }
-    
     @Projection(name = "publisherRating", types = Publisher.class)
     public interface Ratings {
 

@@ -2,12 +2,11 @@ package projectiondemo.repo;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import projectiondemo.BaseTest;
 import projectiondemo.domain.Book;
 
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -20,14 +19,30 @@ public class BookRepoTest extends BaseTest {
     private BookRepo bookRepo;
     
     @Test
-    public void getOne() throws Exception {
-        Book book = bookRepo.getOne(1L);
-        assertThat(book.getAuthor().getName(), is("Author1"));
+    public void getBooksWithAuthor() throws Exception {
+        Page<Book.BookAuthor> bookPages = bookRepo.getBooksWithAuthor(new PageRequest(0, 20));
+        assertThat(bookPages.getContent(), hasSize(20));
     }
     
     @Test
-    public void findAll() throws Exception {
-        List<Book> books = bookRepo.findAll();
-        assertThat(books, hasSize(6));
+    public void topRating() throws Exception {
+        Page<Book.BookRatings> ratings = bookRepo.topRating(new PageRequest(0, 20));
+        ratings.getContent().forEach(b -> System.out.printf("%s, %s, %s, %.1f, %d%n",
+                b.getBook().getTitle(),
+                b.getAuthor().getName(),
+                b.getPublisher().getName(),
+                b.getRating(),
+                b.getReadings()));
+    }
+    
+    @Test
+    public void topReadings() throws Exception {
+        Page<Book.BookRatings> ratings = bookRepo.topReadings(new PageRequest(0, 20));
+        ratings.getContent().forEach(b -> System.out.printf("%s, %s, %s, %.1f, %d%n",
+                b.getBook().getTitle(),
+                b.getAuthor().getName(),
+                b.getPublisher().getName(),
+                b.getRating(),
+                b.getReadings()));
     }
 }
