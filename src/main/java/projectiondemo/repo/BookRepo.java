@@ -23,7 +23,7 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     
     /**
      * An attempt to get the book list sorted by book rating and expose it with Spring Data REST.
-     * <p>But if we call it 'GET http://localhost:8080/api/books/search/topRating'
+     * <p>But when we try to expose it 'GET http://localhost:8080/api/books/search/topRating'
      * it raises an error: 'PersistentEntity must not be null!'
      */
     @RestResource(path = "topRating", rel = "topRating")
@@ -34,7 +34,7 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     
     /**
      * An attempt to get the book list sorted by book number of reading and expose it with Spring Data REST.
-     * <p>But if we call it 'GET http://localhost:8080/api/books/search/topReadings'
+     * <p>But when we try to expose it 'GET http://localhost:8080/api/books/search/topReadings'
      * it raises an error: 'PersistentEntity must not be null!'
      */
     @RestResource(path = "topReadings", rel = "topReadings")
@@ -75,7 +75,7 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     
     /**
      * Example of using Projections as output parameter in the repository method
-     * <p>But than we call it as 'GET http://localhost:8080/api/books/search/withAuthor'
+     * <p>But when we try to expose it 'GET http://localhost:8080/api/books/search/withAuthor'
      * it raises an error: 'PersistentEntity must not be null!'
      */
     @RestResource(path = "withAuthor", rel = "withAuthor")
