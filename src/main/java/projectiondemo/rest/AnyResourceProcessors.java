@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.hateoas.*;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ public class AnyResourceProcessors {
     
     private final @NonNull CacheManager cacheManager;
     private final @NonNull EntityLinks entityLinks;
+    private final @NonNull RepositoryRestConfiguration restConfiguration;
     
     @Component
     public class SingleResourceProcessor implements ResourceProcessor<Resource<?>> {
@@ -68,13 +70,18 @@ public class AnyResourceProcessors {
                         String key = entry.getKey();
                         Object value = entry.getValue();
                         if (BaseEntity.class.isAssignableFrom(value.getClass())) {
+    
+                            // TODO Implement support for Collection resource
                             Link link = entityLinks.linkForSingleResource(value.getClass(), ((BaseEntity) value).getId()).withRel(key);
+
+                            if (dtoImpl.getBaseEntity().equals(value.getClass()) && restConfiguration.getProjectionConfiguration().hasProjectionFor(value.getClass())) {
+                                link = new Link(link.getHref() + "{?projection}", key);
+                            }
                             links.add(link);
                         }
                     }
                     if (dtoImplClass.isAnnotationPresent(Relation.class)) {
                         Relation relation = dtoImplClass.getAnnotation(Relation.class);
-                        String rel = relation.value();
                         links.add(entityLinks.linkForSingleResource(dtoImpl.getBaseEntity(), dtoImpl.getId()).withSelfRel());
                     }
                     return new Resource<>(dtoImpl, links);
