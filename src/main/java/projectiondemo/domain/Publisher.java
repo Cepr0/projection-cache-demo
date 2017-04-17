@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 import projectiondemo.domain.base.LongId;
 import projectiondemo.repo.ReadingRepo;
+import projectiondemo.dto.Ratings;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -38,7 +39,7 @@ public class Publisher extends LongId {
      * Projection that defines {@link Publisher} DTO with it ratings
      */
     @Projection(name = "publisherRating", types = Publisher.class)
-    public interface Ratings {
+    public interface WithRatings {
 
         String getName();
     
@@ -47,6 +48,6 @@ public class Publisher extends LongId {
          */
         @JsonProperty("ratings")
         @Value("#{@readingRepo.getPublisherRatings(target)}")
-        Reading.Ratings getRatings();
+        Ratings getRatings();
     }
 }

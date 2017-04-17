@@ -32,7 +32,7 @@ public class ProjectionDemo {
     
     /**
      * Create three caches to store a result of calculating the ratings of {@link Book}, {@link Author} and {@link Publisher}
-     * <p>in their projections {@link Book.Ratings}, {@link Author.Ratings} and {@link Publisher.Ratings}.
+     * <p>in their projections {@link Book.WithRatings}, {@link Author.WithRatings} and {@link Publisher.WithRatings}.
      * <p>Caches filled in {@link ReadingRepo} 'getXXXRatings' methods
      * and evicted in {@link ReadingEventHandler#evictCaches}
      */

@@ -8,8 +8,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 import projectiondemo.domain.base.LongId;
-import projectiondemo.repo.BookRepo;
 import projectiondemo.repo.ReadingRepo;
+import projectiondemo.dto.Ratings;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,24 +41,10 @@ public class Book extends LongId {
     private final Publisher publisher;
     
     /**
-     * Projection that defines Book ratings DTO - an attempt to use projections in repositories methods
-     * to expose DTO with Spring Data REST.
-     *
-     * See methods {@link BookRepo#topRating} and {@link BookRepo#topReadings}
-     */
-    public interface BookRatings {
-        Book getBook();
-        Author getAuthor();
-        Publisher getPublisher();
-        Double getRating();
-        Long getReadings();
-    }
-    
-    /**
      * Projection that defines {@link Book} DTO with it ratings
      */
     @Projection(name = "bookRating", types = Book.class)
-    public interface Ratings {
+    public interface WithRatings {
         
         String getTitle();
         String getIsbn();
@@ -73,11 +59,11 @@ public class Book extends LongId {
          * {@link ReadingRepo#getBookRatings} is used to calculate {@link Book} ratings and cache result
          */
         @Value("#{@readingRepo.getBookRatings(target)}")
-        Reading.Ratings getRatings();
+        Ratings getRatings();
     }
     
     @Projection(name = "bookAuthor", types = Book.class)
-    public interface BookAuthor {
+    public interface WithAuthor {
         
         String getTitle();
         String getIsbn();
@@ -87,7 +73,7 @@ public class Book extends LongId {
     }
 
     @Projection(name = "bookPublisher", types = Book.class)
-    public interface BookPublisher {
+    public interface WithPublisher {
 
         String getTitle();
         String getIsbn();

@@ -39,6 +39,6 @@ public class ReadingEventHandler {
         cacheManager.getCache("authorRatings").evict(book.getAuthor().getId());
         cacheManager.getCache("publisherRatings").evict(book.getPublisher().getId());
 
-        LOG.info("<<< Ratings caches evicted >>>");
+        LOG.info("<<< WithRatings caches evicted >>>");
     }
 }

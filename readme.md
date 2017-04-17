@@ -98,7 +98,7 @@ public class Book extends LongId {
         String getPublisher();
     
         /**
-         * {@link ReadingRepo#getBookRatings} is used to calculate {@link Book} ratings and cache result
+         * {@link ReadingRepo#getBookRatings} is used to calculate {@link Book} book and cache result
          */
         @Value("#{@readingRepo.getBookRatings(target)}")
         Reading.Ratings getRatings();
@@ -141,7 +141,7 @@ public class Reading extends LongId {
 }
 ```
 
-Now we can get a book list with ratings:
+Now we can get a book list with book:
 
     GET http://localhost:8080/api/books?projection=bookRating
 ```json
@@ -149,7 +149,7 @@ Now we can get a book list with ratings:
   "_embedded" : {
     "books" : [ {
       "author" : "Author00003",
-      "ratings" : {
+      "book" : {
         "rating" : 3.6666667,
         "readings" : 3
       },
@@ -176,7 +176,7 @@ Now we can get a book list with ratings:
       }
     }, {
       "author" : "Author00001",
-      "ratings" : {
+      "book" : {
         "rating" : 1.5,
         "readings" : 2
       },
@@ -238,7 +238,7 @@ Now we can get a book list with ratings:
 }
 ```
 
-All looks fine but we have a 'small' issue here - for each record in this list we have an extra query to the DB that calculate ratings:
+All looks fine but we have a 'small' issue here - for each record in this list we have an extra query to the DB that calculate book:
 
 ```sql
 select avg(r.rating) as rating, count(r) as readings from Reading r where r.book = ?1
@@ -246,7 +246,7 @@ select avg(r.rating) as rating, count(r) as readings from Reading r where r.book
 
 On the large database this can significantly decrease its performance.
 
-To reduce the impact of 1+N queries problem we can try to use a **cache**. First we prepare the cache for book ratings:
+To reduce the impact of 1+N queries problem we can try to use a **cache**. First we prepare the cache for book book:
   
 ```java
 @SpringBootApplication
@@ -298,10 +298,10 @@ public class ReadingEventHandler {
         Book book = reading.getBook();
         cacheManager.getCache("bookRatings").evict(book.getId());
  
-        LOG.info("<<< Ratings caches evicted >>>");
+        LOG.info(WithRatings);
     }
 }
 ```
 
 Now the second and the next calls of ```GET http://localhost:8080/api/books?projection=bookRating```
- will take ratings data from the cache.
+ will take book data from the cache.

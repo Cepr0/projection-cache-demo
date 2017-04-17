@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
 import projectiondemo.domain.Book;
+import projectiondemo.dto.BookWithRatings;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     @Transactional(readOnly = true)
     @Query(value = "select r.book as book, r.book.author as author, r.book.publisher as publisher, avg(r.rating) as rating, count(r) as readings from Reading r group by r.book order by rating desc, r.book.title asc",
             countQuery = "select count(b) from Book b")
-    Page<Book.BookRatings> topRating(Pageable pageable);
+    Page<BookWithRatings> topRating(Pageable pageable);
     
     /**
      * An attempt to get the book list sorted by book number of reading and expose it with Spring Data REST.
@@ -41,7 +42,7 @@ public interface BookRepo extends JpaRepository<Book, Long> {
     @Transactional(readOnly = true)
     @Query(value = "select r.book as book, r.book.author as author, r.book.publisher as publisher, avg(r.rating) as rating, count(r) as readings from Reading r group by r.book order by readings desc, r.book.title asc",
             countQuery = "select count(b) from Book b")
-    Page<Book.BookRatings> topReadings(Pageable pageable);
+    Page<BookWithRatings> topReadings(Pageable pageable);
     
     /**
      * Example of 'search' method - find books by author name
@@ -80,12 +81,12 @@ public interface BookRepo extends JpaRepository<Book, Long> {
      */
     @RestResource(path = "withAuthor", rel = "withAuthor")
     @Query("select b.title as title, b.isbn as isbn, a as author from Book b join b.author a")
-    Page<Book.BookAuthor> getBooksWithAuthor(Pageable pageable);
+    Page<Book.WithAuthor> getBooksWithAuthor(Pageable pageable);
     
     /**
      * Another attempt to expose projection
      */
     @EntityGraph(attributePaths = {"author", "publisher"})
     @RestResource(path = "byAuthorName", rel = "byAuthorName")
-    List<Book.BookAuthor> findByAuthor_Name(@Param("name") String authorName);
+    List<Book.WithAuthor> findByAuthor_Name(@Param("name") String authorName);
 }
