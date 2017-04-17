@@ -37,14 +37,10 @@ public class BookWithRatingsImpl implements BookWithRatings {
         return book.getPublisher().getName();
     }
     
+    @JsonIgnore
     @Override
-    public Double getRating() {
-        return book.getRating();
-    }
-    
-    @Override
-    public Long getReadings() {
-        return book.getReadings();
+    public Long getId() {
+        return getBook().getId();
     }
     
     @JsonIgnore
@@ -63,5 +59,15 @@ public class BookWithRatingsImpl implements BookWithRatings {
     @Override
     public Publisher getPublisher() {
         return book.getPublisher();
+    }
+    
+    @Override
+    public Double getRating() {
+        return book.getRating();
+    }
+    
+    @Override
+    public Long getReadings() {
+        return book.getReadings();
     }
 }

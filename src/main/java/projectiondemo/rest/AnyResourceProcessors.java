@@ -4,13 +4,15 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.ResourceProcessor;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.*;
+import org.springframework.hateoas.core.Relation;
 import org.springframework.stereotype.Component;
+import projectiondemo.domain.base.BaseEntity;
+import projectiondemo.dto.Dto;
+import projectiondemo.util.ProxyHelper;
 
 import java.lang.reflect.Constructor;
+import java.util.*;
 
 /**
  * Repository REST Resource processors
@@ -22,6 +24,7 @@ import java.lang.reflect.Constructor;
 public class AnyResourceProcessors {
     
     private final @NonNull CacheManager cacheManager;
+    private final @NonNull EntityLinks entityLinks;
     
     @Component
     public class SingleResourceProcessor implements ResourceProcessor<Resource<?>> {
@@ -34,19 +37,20 @@ public class AnyResourceProcessors {
         }
     
         /**
-         * Try to instantiate a DTO from 'resource' content then make a {@link Resource} for it.
-         * To instantiate a DTO this method add 'Impl' suffix to resource content interface,
-         * so DTO implementation class must be in the same package as a resource content interface
+         * Try to instantiate a Dto from 'resource' content then make a {@link Resource} for it.
+         * To instantiate a Dto this method add 'Impl' suffix to resource content interface,
+         * so Dto implementation class must be in the same package as a resource content interface
          * and has name 'resource content interface name' + 'Impl'.
          * @param resource a {@link Resource} object
-         * @return {@link Resource} for DTO related to interface of 'resource' content
-         * or input parameter if DTO implementation doesn't exists
+         * @return {@link Resource} for Dto related to interface of 'resource' content
+         * or input parameter if Dto implementation doesn't exists
          */
         private Resource<?> tryToGetDtoResource(Resource<?> resource) {
             Object content = resource.getContent();
             Class<?>[] interfaces = content.getClass().getInterfaces();
         
-            if (interfaces.length > 0) {
+            // TODO refactor this block - move to the util class?
+            if (interfaces.length > 0 && interfaces[0].getInterfaces().length > 0 && interfaces[0].getInterfaces()[0].equals(Dto.class)) {
                 Class<?> dtoInterface = interfaces[0];
                 String dtoInterfaceName = dtoInterface.getSimpleName();
                 String dtoPackageName = dtoInterface.getPackage().getName();
@@ -54,9 +58,26 @@ public class AnyResourceProcessors {
                 try {
                     Class<?> dtoImplClass = Class.forName(dtoImplName);
                     Constructor<?> dtoImplCtor = dtoImplClass.getDeclaredConstructor(dtoInterface);
-                    Object dtoImpl = dtoImplCtor.newInstance(content);
-
-                    return new Resource<>(dtoImpl);
+                    Dto dtoImpl = (Dto) dtoImplCtor.newInstance(content);
+    
+                    HashMap dtoMap = (HashMap) ProxyHelper.getTargetObject(content);
+                    List<Link> links = new ArrayList<>();
+    
+                    //noinspection unchecked
+                    for (Map.Entry<String, Object> entry : (Set<Map.Entry<String, Object>>) dtoMap.entrySet()) {
+                        String key = entry.getKey();
+                        Object value = entry.getValue();
+                        if (BaseEntity.class.isAssignableFrom(value.getClass())) {
+                            Link link = entityLinks.linkForSingleResource(value.getClass(), ((BaseEntity) value).getId()).withRel(key);
+                            links.add(link);
+                        }
+                    }
+                    if (dtoImplClass.isAnnotationPresent(Relation.class)) {
+                        Relation relation = dtoImplClass.getAnnotation(Relation.class);
+                        String rel = relation.value();
+                        links.add(entityLinks.linkForSingleResource(dtoImpl.getBaseEntity(), dtoImpl.getId()).withSelfRel());
+                    }
+                    return new Resource<>(dtoImpl, links);
 
                 } catch (Exception ignored) {
                 }
@@ -81,6 +102,8 @@ public class AnyResourceProcessors {
         @Override
         public PagedResources<Resource<?>> process(PagedResources<Resource<?>> resource) {
             // LOG.debug("PagedResourceProcessor {}", resource.toString());
+            
+            // TODO Implement links for page: profile and search
             return resource;
         }
     }

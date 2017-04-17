@@ -22,6 +22,7 @@ public class BookController {
     private final @NonNull BookRepo bookRepo;
     private final @NonNull PagedResourcesAssembler<BookWithRatings> assembler;
     
+    // TODO Implement auto implementation DTO Controllers like this
     @GetMapping("/topRating")
     public ResponseEntity<?> getRating(Pageable pageable) {
     

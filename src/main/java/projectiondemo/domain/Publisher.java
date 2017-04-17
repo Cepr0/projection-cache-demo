@@ -36,7 +36,7 @@ public class Publisher extends LongId {
     private final List<Book> books = new ArrayList<>();
     
     /**
-     * Projection that defines {@link Publisher} DTO with it ratings
+     * Projection that defines {@link Publisher} Dto with it ratings
      */
     @Projection(name = "publisherRating", types = Publisher.class)
     public interface WithRatings {

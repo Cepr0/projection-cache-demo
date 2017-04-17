@@ -41,7 +41,7 @@ public class Book extends LongId {
     private final Publisher publisher;
     
     /**
-     * Projection that defines {@link Book} DTO with it ratings
+     * Projection that defines {@link Book} Dto with it ratings
      */
     @Projection(name = "bookRating", types = Book.class)
     public interface WithRatings {

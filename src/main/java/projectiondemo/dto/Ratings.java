@@ -8,7 +8,7 @@ import projectiondemo.domain.Book;
 import projectiondemo.domain.Publisher;
 
 /**
- * Simple DTO to store rating and reading count values of {@link Book}, {@link Author} or {@link Publisher}
+ * Simple Dto to store rating and reading count values of {@link Book}, {@link Author} or {@link Publisher}
  * <p>in {@link Book.WithRatings}, {@link Author.WithRatings} and {@link Publisher.WithRatings} projections
  */
 @Description("Book ratings")
