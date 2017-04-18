@@ -1,7 +1,6 @@
 package projectiondemo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.core.Relation;
 import projectiondemo.domain.Author;
 import projectiondemo.domain.Book;
@@ -17,30 +16,6 @@ public class BookWithRatingsImpl implements BookWithRatings {
     
     public BookWithRatingsImpl(BookWithRatings bookWithRatings) {
         this.book = bookWithRatings;
-    }
-    
-    public String getTitle() {
-        return book.getBook().getTitle();
-    }
-    
-    public String getIsbn() {
-        return book.getBook().getIsbn();
-    }
-    
-    @JsonProperty("author")
-    public String getAuthorName() {
-        return book.getAuthor().getName();
-    }
-    
-    @JsonProperty("publisher")
-    public String getPublisherName() {
-        return book.getPublisher().getName();
-    }
-    
-    @JsonIgnore
-    @Override
-    public Long getId() {
-        return getBook().getId();
     }
     
     @JsonIgnore

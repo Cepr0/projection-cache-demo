@@ -1,5 +1,7 @@
 package projectiondemo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import projectiondemo.domain.Author;
 import projectiondemo.domain.Book;
 import projectiondemo.domain.Publisher;
@@ -26,4 +28,30 @@ public interface BookWithRatings extends Dto<Book, Long> {
     default Class<Book> getBaseEntity() {
         return Book.class;
     }
+
+    @JsonIgnore
+    @Override
+    default Long getId() {
+        return getBook().getId();
+    }
+
+    default String getTitle() {
+        return getBook().getTitle();
+    }
+
+    default String getIsbn() {
+        return getBook().getIsbn();
+    }
+
+    @JsonProperty("author")
+    default String getAuthorName() {
+        return getAuthor().getName();
+    }
+
+    @JsonProperty("publisher")
+    default String getPublisherName() {
+        return getPublisher().getName();
+    }
+
+
 }
