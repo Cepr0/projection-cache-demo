@@ -36,6 +36,8 @@ public class AnyResourceProcessors {
             // LOG.debug("SingleResourceProcessor {}", resource.toString());
     
             return tryToGetDtoResource(resource);
+//            return resource;
+
         }
     
         /**

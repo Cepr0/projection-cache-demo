@@ -2,6 +2,9 @@ package projectiondemo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.springframework.hateoas.core.Relation;
 import projectiondemo.domain.Author;
 import projectiondemo.domain.Book;
 import projectiondemo.domain.Publisher;
@@ -13,14 +16,24 @@ import projectiondemo.repo.BookRepo;
  *
  * See methods {@link BookRepo#topRating} and {@link BookRepo#topReadings}
  */
-// @JsonSerialize(as = BookWithRatings.class)
+@JsonSerialize(as = BookWithRatings.class)
+@JsonTypeName("book")
+@Relation(value = "book", collectionRelation = "books")
 // TODO Implement @Dto
 // Prototype: @Dto(baseEntity=Book.class, rel="topRating", value = "book", collectionRelation = "books")
 public interface BookWithRatings extends Dto<Book, Long> {
+
+    @JsonIgnore
     Book getBook();
+
+    @JsonIgnore
     Author getAuthor();
+
+    @JsonIgnore
     Publisher getPublisher();
+
     Double getRating();
+
     Long getReadings();
     
     // TODO Find a better way to implement this
@@ -52,6 +65,4 @@ public interface BookWithRatings extends Dto<Book, Long> {
     default String getPublisherName() {
         return getPublisher().getName();
     }
-
-
 }
